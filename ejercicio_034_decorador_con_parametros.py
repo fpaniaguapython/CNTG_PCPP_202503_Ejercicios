@@ -10,8 +10,6 @@ def decorador(idioma):
         return internal_wrapper
     return external_wrapper
 
-
-
 @decorador('en')
 def calcular_suma(sumando_1, sumando_2):
     return sumando_1 + sumando_2
