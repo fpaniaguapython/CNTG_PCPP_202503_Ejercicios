@@ -1,5 +1,5 @@
 class Metagrupo:
-    super_capacidad_maxima = 100
+    super_capacidad_maxima = 100 # Variable o atributo de clase
 
 class Grupo(Metagrupo):
     capacidad_maxima = 50 # Variable o atributo de clase
@@ -12,7 +12,6 @@ class Grupo(Metagrupo):
 
     @classmethod
     def duplicar_capacidad(cls): # Método de clase
-        print(cls)
         cls.capacidad_maxima*=2
 
     @staticmethod
