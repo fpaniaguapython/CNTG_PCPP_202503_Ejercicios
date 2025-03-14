@@ -17,6 +17,7 @@ def decorador(clase_a_decorar):
         print('inner_wrapper - args:', args)
         print('inner_wrapper - kwargs:', kwargs)
         instancia = clase_a_decorar(*args, **kwargs)
+        instancia.loquesea = True
         # *****************************************************************
         # En este punto, disponemos de una referencia al objeto (instancia)
         instancia.generado = False
