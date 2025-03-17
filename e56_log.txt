@@ -1,0 +1,3 @@
+17/03/2025 19:56:48,Ha ocurrido un error desconocido
+17/03/2025 19:57:23,Alguno de los argumentos del pedido no es un número entero
+17/03/2025 19:57:36,Alguno de los argumentos del pedido no tiene un valor positivo
