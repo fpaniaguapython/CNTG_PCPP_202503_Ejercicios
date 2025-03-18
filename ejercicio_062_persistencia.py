@@ -37,6 +37,11 @@ class GestorPersistenciaPickle(GestorPersistencia):
             objeto = pickle.load(archivo)
         return objeto
 
+'''
+Crear otra implementación de GestorPersistencia como queráis: 
+json, ficheros planos con delimitadores, csv,...
+'''
+
 class GestorPersistenciaFactory:
     @staticmethod
     def get_gestor_persistencia() -> GestorPersistencia:
