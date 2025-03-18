@@ -5,7 +5,6 @@ Mostrar un menú con las siguientes opciones:
 3. Salir
 Nota: utilizamos el módulo pickle
 '''
-
 from ejercicio_062_persistencia import GestorPersistenciaFactory
 
 class Pelicula:
