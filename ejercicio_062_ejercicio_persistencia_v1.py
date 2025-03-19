@@ -3,7 +3,7 @@ Mostrar un menú con las siguientes opciones:
 1. Añadir Película (pide datos y los guarda)
 2. Recuperar Película (pide título, la recupera y la muestra)
 3. Salir
-Nota: utilizamos el módulo pickle
+Nota: utilizamos el módulo pickle y otros alternativos
 '''
 from ejercicio_062_persistencia import GestorPersistenciaFactory
 
@@ -24,8 +24,7 @@ class Pelicula:
 
     @classmethod
     def read(cls, titulo):
-        return cls.gestor_persistencia.read(titulo)
-
+        return cls.gestor_persistencia.read(Pelicula, titulo)
 
 if __name__=='__main__':
     while (True):

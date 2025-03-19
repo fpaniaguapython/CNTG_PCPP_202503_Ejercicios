@@ -5,14 +5,13 @@ class TipoPersistencia(enum.Enum):
     PICKLE = 1
     FICHERO = 2
 
-
 class GestorPersistencia(abc.ABC):
     @abc.abstractmethod
     def create(self, id, obj):
         pass
 
     @abc.abstractmethod
-    def read(self, id):
+    def read(self, clase, id):
         pass
 
     # @abc.abstractmethod
@@ -40,12 +39,11 @@ class GPPickle(GestorPersistencia):
         with open(nombre_fichero, mode = 'wb') as archivo:
             pickle.dump(obj, archivo)
 
-    def read(self, id):
+    def read(self, clase, id):
         nombre_fichero = GPPickle.__get_file_name(id)
         with open(nombre_fichero, mode = 'rb') as archivo:
             objeto = pickle.load(archivo)
         return objeto
-
 
 '''
 Implementación de Gestor de Persistencia basado en ficheros de texto
@@ -64,17 +62,19 @@ class GPFichero(GestorPersistencia):
             for k,v in obj.__dict__.items():
                 archivo.write(k+GPFichero.DELIMITADOR+v+'\n')
 
-    def read(self, id):
-        pass
-        # with open(GPFichero.__get_file_name(id), mode='rt', encoding='utf-8') \
-        #     as archivo:
-        #     atributos = archivo.readlines()
-        #     objeto = object()
-        #     for atributo in atributos:
-        #         if (len(atributo.strip())!=0):
-        #             token = atributo.split(GPFichero.DELIMITADOR)
-        #             objeto.__setattr__(token[0], token[1])
-        #     return object
+    def read(self, clase, id):
+        with open(GPFichero.__get_file_name(id), mode='rt', encoding='utf-8') \
+            as archivo:
+            atributos_serializados = archivo.readlines()
+            atributos_serializados = [atributo_serializado.replace('\n','') \
+                                      for atributo_serializado in atributos_serializados]
+            atributos = dict()
+            for atributo in atributos_serializados:
+                if (len(atributo.strip())!=0): # Si la línea tiene contenido
+                    nuevo_atributo = atributo.split(GPFichero.DELIMITADOR)
+                    atributos[nuevo_atributo[0]]=nuevo_atributo[1]
+            objeto = clase(**atributos) # Desempaquetamos el diccionario
+            return objeto
 
 '''
 Factory del Gestor de Persistencia
