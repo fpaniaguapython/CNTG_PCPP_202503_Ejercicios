@@ -40,7 +40,7 @@ def saludar(self):
 MiNuevaClase = type('MiNuevaClase', (object,), {'idioma':'Español','saludar':saludar})
 
 instancia = MiNuevaClase()
-print(instancia.idioma)
+print(MiNuevaClase.idioma)
 instancia.saludar()
 
 # Crear una clase Videojuego, que tenga constructor con título y plataforma, y método mostrar datos
