@@ -15,4 +15,4 @@ try:
 except MiException as me:
     print(me)
     print('__context__:', me.__context__) # division by zero
-    print('__couse__:', me.__cause__) # division by zero
+    print('__cause__:', me.__cause__) # division by zero
