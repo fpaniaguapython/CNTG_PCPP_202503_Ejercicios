@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 botones = []
 fichas = ['O','X']
@@ -6,16 +7,19 @@ turno = 0
 
 def seleccionar_celda(boton_pulsado):
     global turno
-    turno+=1
-    boton_pulsado['text']=fichas[turno%2]
+    if (boton_pulsado['text'] == ''):
+        turno+=1
+        boton_pulsado['text']=fichas[turno%2]
 
 def reiniciar_tablero():
-    for boton in botones:
-        boton['text']=''
+    respuesta = messagebox.askokcancel('Reinicio', '¿Quiere reiniciar')
+    if respuesta:
+        for boton in botones:
+            boton['text']=''
 
 tablero = tk.Tk()
 tablero.title('3 EN RAYA')
-tablero.geometry('450x550')
+tablero.geometry('450x540')
 
 for fila in range(3):
     for columna in range(3):
