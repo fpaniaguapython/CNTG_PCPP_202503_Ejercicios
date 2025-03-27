@@ -21,6 +21,7 @@ class SuperMovieGUI:
         self.window.geometry(f'{SuperMovieGUI.WINDOW_WIDTH}x{SuperMovieGUI.WINDOW_HEIGHT}')
         self.window.title = f'{SuperMovieGUI.APP_TITLE}. {SuperMovieGUI.VERSION}'
 
+        self.__create_menu()
         self.__create_buttons_bar()
         self.__create_search_frame()
 
@@ -29,12 +30,14 @@ class SuperMovieGUI:
     def __create_buttons_bar(self):
         #region Creación del Frame
         buttons_frame = tk.Frame(self.window, height=100, bg='#AAAAAA')
-        buttons_frame.pack(fill='x', anchor='n')
+        # fill='x', hace que el Frame ocupe todo el ancho
+        # anchor='n', hace que el Frame se 'ancle' al NORTE (parte superior del contenedor)
+        buttons_frame.pack(fill='x', anchor='n') 
         #endregion
 
         #region Creación de los botones (dentro del frame)
         self.b_search = tk.Button(buttons_frame, text='Buscar', height=2, command=self.__search_movie)
-        self.b_search.grid(row=0, column=0)
+        self.b_search.grid(row=0, column=0, padx=10, pady=10)
         self.b_save = tk.Button(buttons_frame, text='Guardar', height=2, command=self.__save_movie)
         self.b_save.grid(row=0, column=1)
         #endregion
@@ -42,7 +45,7 @@ class SuperMovieGUI:
     def __create_search_frame(self):
         #region Creación del Frame
         # Ocupa todo el espacio disponible, gracias a fill y a expand
-        self.search_frame = tk.Frame(self.window, bg='#EEEEEE')
+        self.search_frame = tk.LabelFrame(self.window, bg='#EEEEEE', text='Película', labelanchor=tk.NW)
         self.search_frame.pack(fill='both', expand=True)
         # endregion
 
@@ -52,6 +55,7 @@ class SuperMovieGUI:
 
         self.e_search_title = tk.Entry(self.search_frame, width=50)
         self.e_search_title.place(x=300, y=50)
+        
 
         self.l_title = tk.Label(self.search_frame, text='Título:')
         self.l_director = tk.Label(self.search_frame, text='Director:')
@@ -75,10 +79,31 @@ class SuperMovieGUI:
 
         #endregion
 
+    def __create_menu(self):
+        # *** MENÚ PRINCIPAL ***
+        # Creación del menú
+        self.main_menu = tk.Menu(self.window) 
+        # Asignación del menú a la ventana
+        self.window.config(menu=self.main_menu) 
+        
+        # *** MENÚ FILE ***
+        # Creación del submenú, sobre el menú principal
+        # tearoff=0 --> Elimina una línea discontínua del menú. Probar quitando el atributo.
+        self.file_menu = tk.Menu(self.main_menu, tearoff=0) 
+        # Asignamos el menú File al menú principal
+        self.main_menu.add_cascade(label='File', menu=self.file_menu, underline=0) 
+
+        # *** MENÚ FILE - OPCIÓN OPEN
+        self.file_menu.add_command(label='Open', underline=0, command=self.__show_not_implemented_error)
+
+
     def __search_movie(self):
+        self.window.config(cursor='clock')
         title = self.e_search_title.get().strip()
         if (title==''):
             self.__show_warning('Debe introducir un título para poder realizar una búsqueda')
+            self.e_search_title.focus_set()
+        self.window.config(cursor='arrow')
 
     def __save_movie(self):
         title = self.e_title.get().strip()
@@ -88,10 +113,12 @@ class SuperMovieGUI:
         year = int(self.sp_year.get())
         if (title==''):
             self.__show_warning('No hay datos para almacenar')
+            self.e_title.focus_set()
         else:
             print(title, director, plot, year)
 
+    def __show_not_implemented_error(self):
+        messagebox.showerror(SuperMovieGUI.APP_TITLE, 'Opción no implementada')
+
     def __show_warning(self, text):
         messagebox.showwarning(SuperMovieGUI.APP_TITLE, text)
-
-    
