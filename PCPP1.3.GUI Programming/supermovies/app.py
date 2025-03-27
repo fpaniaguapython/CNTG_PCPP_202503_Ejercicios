@@ -1,2 +1,4 @@
+import gui_app
+
 if __name__=='__main__':
-    pass
+    gui_app = gui_app.SuperMovieGUI()
