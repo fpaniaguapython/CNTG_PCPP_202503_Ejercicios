@@ -9,12 +9,9 @@ def desvincular(event):
     label.unbind('<Button-1>') # Desvinculamos el evento
     label['text']='Ya no'
     messagebox.showinfo('Ejemplo','Botón desvinculado')
-    
-    
 
 label = tk.Label(main_window, text='Púlsame')
 label.bind('<Button-1>', desvincular) # Pulsar con el ratón
 label.pack()
-
 
 main_window.mainloop()
