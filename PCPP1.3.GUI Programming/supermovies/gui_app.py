@@ -80,6 +80,18 @@ class SuperMovieGUI:
         #endregion
 
     def __create_menu(self):
+        # El menú va a tener las opciones siguientes:
+        # File
+        # --- Open
+        # --- Close
+        # --- Config
+        # --- Exit
+        # Movies
+        # --- Add movie
+        # --- View movies
+        # Help
+        # --- About
+
         # *** MENÚ PRINCIPAL ***
         # Creación del menú
         self.main_menu = tk.Menu(self.window) 
