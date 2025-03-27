@@ -16,16 +16,42 @@ class SuperMovieGUI:
     VERSION = '1.0'
     WINDOW_WIDTH = 800
     WINDOW_HEIGHT = 600
+    WINDOW_MIN_WIDTH = 640
+    WINDOW_MIN_HEIGHT = 480
+    WINDOW_MAX_WIDTH = 1024
+    WINDOW_MAX_HEIGHT = 768
+    ICON = 'icon.png'
     def __init__(self):
-        self.window = tk.Tk()
-        self.window.geometry(f'{SuperMovieGUI.WINDOW_WIDTH}x{SuperMovieGUI.WINDOW_HEIGHT}')
-        self.window.title = f'{SuperMovieGUI.APP_TITLE}. {SuperMovieGUI.VERSION}'
-
+        self.__create_window()
         self.__create_menu()
         self.__create_buttons_bar()
         self.__create_search_frame()
 
         self.window.mainloop()
+
+    def __create_window(self):
+        self.window = tk.Tk()
+        
+        # Título
+        self.window.title(f'{SuperMovieGUI.APP_TITLE}. {SuperMovieGUI.VERSION}')
+        
+        # Icono
+        icon = tk.PhotoImage(file=SuperMovieGUI.ICON) # Crear un objeto con la imagen
+        self.window.iconphoto(True, icon)
+        
+        # Tamaño
+        self.window.geometry(f'{SuperMovieGUI.WINDOW_WIDTH}x{SuperMovieGUI.WINDOW_HEIGHT}')
+        # Restricción de tamaño mínimo
+        #self.window.minsize(width=SuperMovieGUI.WINDOW_MIN_WIDTH, height=SuperMovieGUI.WINDOW_MIN_HEIGHT)
+        # Restricción de tamaño máximo
+        #self.window.maxsize(width=SuperMovieGUI.WINDOW_MAX_WIDTH, height=SuperMovieGUI.WINDOW_MAX_HEIGHT)
+        # Restricción de cambio de tamaño
+        self.window.resizable(width=False, height=False)
+
+        # Protocol
+        # Intercepta el cierre de la ventana (no el fin de la aplicación)
+        self.window.protocol('WM_DELETE_WINDOW', self.__do_final_tasks)
+
 
     def __create_buttons_bar(self):
         #region Creación del Frame
@@ -37,7 +63,7 @@ class SuperMovieGUI:
 
         #region Creación de los botones (dentro del frame)
         self.b_search = tk.Button(buttons_frame, text='Buscar', height=2, command=self.__search_movie)
-        self.b_search.grid(row=0, column=0, padx=10, pady=10)
+        self.b_search.grid(row=0, column=0)
         self.b_save = tk.Button(buttons_frame, text='Guardar', height=2, command=self.__save_movie)
         self.b_save.grid(row=0, column=1)
         #endregion
@@ -80,18 +106,6 @@ class SuperMovieGUI:
         #endregion
 
     def __create_menu(self):
-        # El menú va a tener las opciones siguientes:
-        # File
-        # --- Open
-        # --- Close
-        # --- Config
-        # --- Exit
-        # Movies
-        # --- Add movie
-        # --- View movies
-        # Help
-        # --- About
-
         # *** MENÚ PRINCIPAL ***
         # Creación del menú
         self.main_menu = tk.Menu(self.window) 
@@ -105,9 +119,30 @@ class SuperMovieGUI:
         # Asignamos el menú File al menú principal
         self.main_menu.add_cascade(label='File', menu=self.file_menu, underline=0) 
 
-        # *** MENÚ FILE - OPCIÓN OPEN
+        # *** MENÚ FILE - OPCIONES
         self.file_menu.add_command(label='Open', underline=0, command=self.__show_not_implemented_error)
+        self.file_menu.add_command(label='Close', underline=1, command=self.__show_not_implemented_error)
+        self.file_menu.add_command(label='Config', underline=2, command=self.__show_not_implemented_error)
+        self.file_menu.add_separator() # Dibujar una línea horizontal
+        self.file_menu.add_command(label='Exit', underline=0, command=self.__exit_app, accelerator='Ctrl-E')
 
+        self.window.bind_all("<Control-e>", self.__exit_app)
+
+
+        # *** MENU MOVIES ***
+        self.movies_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.main_menu.add_cascade(label='Movies', menu=self.movies_menu, underline=0) 
+        
+        # *** MENÚ FILE - OPCIONES
+        self.movies_menu.add_command(label='Add', underline=0, command=self.__show_not_implemented_error)
+        self.movies_menu.add_command(label='View', underline=1, command=self.__show_not_implemented_error)
+
+        # *** MENU HELP ***
+        self.help_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.main_menu.add_cascade(label='Help', menu=self.help_menu, underline=0) 
+
+        # *** MENÚ HELP - OPCIONES
+        self.help_menu.add_command(label='About...', underline=0, command=self.__show_about)
 
     def __search_movie(self):
         self.window.config(cursor='clock')
@@ -129,8 +164,24 @@ class SuperMovieGUI:
         else:
             print(title, director, plot, year)
 
+    def __exit_app(self, event=None):
+        # El objeto event se recibe solo en el caso del bind, no en el command.
+        # Si hay que hacer un tratamiento distinto, se debe programar teniendo en
+        # cuenta que puede ser None.
+        wants_exit = messagebox.askokcancel(SuperMovieGUI.APP_TITLE, '¿Desea salir de la aplicación')
+        if (wants_exit):
+            # self.window.quit() # Destruye todos los widgets
+            self.window.destroy() # Destruye el widget y todos sus descendientes
+
     def __show_not_implemented_error(self):
         messagebox.showerror(SuperMovieGUI.APP_TITLE, 'Opción no implementada')
 
     def __show_warning(self, text):
         messagebox.showwarning(SuperMovieGUI.APP_TITLE, text)
+
+    def __show_about(self):
+        messagebox.showinfo(SuperMovieGUI.APP_TITLE, 'Versión 1.0. By Fernando Paniagua. 2025.')
+
+    def __do_final_tasks(self):
+        print('Haciendo las tareas de cierre de la aplicación...')
+        self.window.destroy()
