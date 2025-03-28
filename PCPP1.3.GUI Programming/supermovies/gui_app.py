@@ -27,7 +27,7 @@ class SuperMovieGUI:
         # Ventana principal
         self.__create_window()
         # Frames (no se muestran)
-        self.frames = dict() 
+        self.frames = dict() # Almacena todas las pantallas de la aplicación
         self.frames['create']=self.__create_search_frame()
         self.frames['view']=self.__create_data_table_frame()
         # Menú
@@ -62,6 +62,46 @@ class SuperMovieGUI:
         # Intercepta el cierre de la ventana (no el fin de la aplicación)
         self.window.protocol('WM_DELETE_WINDOW', self.__do_final_tasks)
 
+    def __create_menu(self):
+        # *** MENÚ PRINCIPAL ***
+        # Creación del menú
+        self.main_menu = tk.Menu(self.window) 
+        # Asignación del menú a la ventana
+        self.window.config(menu=self.main_menu) 
+        
+        # *** MENÚ FILE ***
+        # Creación del submenú, sobre el menú principal
+        # tearoff=0 --> Elimina una línea discontínua del menú. Probar quitando el atributo.
+        self.file_menu = tk.Menu(self.main_menu, tearoff=0) 
+        # Asignamos el menú File al menú principal
+        self.main_menu.add_cascade(label='File', menu=self.file_menu, underline=0) 
+
+        # *** MENÚ FILE - OPCIONES
+        self.file_menu.add_command(label='Open', underline=0, command=self.__show_not_implemented_error)
+        self.file_menu.add_command(label='Close', underline=1, command=self.__show_not_implemented_error)
+        self.file_menu.add_command(label='Config', underline=2, command=self.__show_not_implemented_error)
+        self.file_menu.add_separator() # Dibujar una línea horizontal
+        self.file_menu.add_command(label='Exit', underline=0, command=self.__exit_app, accelerator='Ctrl-E')
+
+        self.window.bind_all('<Control-e>', self.__exit_app)
+
+        # *** MENU MOVIES ***
+        self.movies_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.main_menu.add_cascade(label='Movies', menu=self.movies_menu, underline=0) 
+        
+        # *** MENÚ MOVIES - OPCIONES
+        self.movies_menu.add_command(label='Add', underline=0, 
+            command= lambda target = self.frames['create'] : self.__show_frame(target, fill_method='none', button_frame_enabled=True))
+        self.movies_menu.add_command(label='View', underline=1, 
+            command= lambda target = self.frames['view'] : self.__show_frame(target, fill_method='both', button_frame_enabled=False))
+
+        # *** MENU HELP ***
+        self.help_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.main_menu.add_cascade(label='Help', menu=self.help_menu, underline=0) 
+
+        # *** MENÚ HELP - OPCIONES
+        self.help_menu.add_command(label='About...', underline=0, command=self.__show_about)
+
     def __create_buttons_bar(self):
         #region Creación del Frame
         self.buttons_frame = tk.Frame(self.window, height=100, bg='#E0E0E0')
@@ -81,9 +121,7 @@ class SuperMovieGUI:
         self.b_save.config(image=self.save_image)
         self.b_save.grid(row=0, column=1)
 
-      
-        
-
+        # Guardamos todos los botones en una lista
         self.all_buttons = []
         self.all_buttons.append(self.b_search)
         self.all_buttons.append(self.b_save)
@@ -136,7 +174,7 @@ class SuperMovieGUI:
         
         # Tabla
         tree = ttk.Treeview(self.data_table_frame, columns=('Id', 'Title', 'Director', 'Plot', 'Year'), show='headings')
-        tree.column('Id', anchor='e', width=30)
+        tree.column('Id', anchor='e', width=30) # anchor determina la alineación del contenido
         tree.column('Title')
         tree.column('Director', width=50)
         tree.column('Plot')
@@ -177,54 +215,13 @@ class SuperMovieGUI:
             1975)
         ]
 
-        for fila in peliculas:
-            tree.insert('', 'end', values=fila)
+        for pelicula in peliculas:
+            tree.insert('', 'end', values=pelicula)
 
         # Posicionamiento de la tabla
         tree.pack(expand=True, fill='both')
 
         return self.data_table_frame
-
-    def __create_menu(self):
-        # *** MENÚ PRINCIPAL ***
-        # Creación del menú
-        self.main_menu = tk.Menu(self.window) 
-        # Asignación del menú a la ventana
-        self.window.config(menu=self.main_menu) 
-        
-        # *** MENÚ FILE ***
-        # Creación del submenú, sobre el menú principal
-        # tearoff=0 --> Elimina una línea discontínua del menú. Probar quitando el atributo.
-        self.file_menu = tk.Menu(self.main_menu, tearoff=0) 
-        # Asignamos el menú File al menú principal
-        self.main_menu.add_cascade(label='File', menu=self.file_menu, underline=0) 
-
-        # *** MENÚ FILE - OPCIONES
-        self.file_menu.add_command(label='Open', underline=0, command=self.__show_not_implemented_error)
-        self.file_menu.add_command(label='Close', underline=1, command=self.__show_not_implemented_error)
-        self.file_menu.add_command(label='Config', underline=2, command=self.__show_not_implemented_error)
-        self.file_menu.add_separator() # Dibujar una línea horizontal
-        self.file_menu.add_command(label='Exit', underline=0, command=self.__exit_app, accelerator='Ctrl-E')
-
-        self.window.bind_all('<Control-e>', self.__exit_app)
-
-
-        # *** MENU MOVIES ***
-        self.movies_menu = tk.Menu(self.main_menu, tearoff=0)
-        self.main_menu.add_cascade(label='Movies', menu=self.movies_menu, underline=0) 
-        
-        # *** MENÚ FILE - OPCIONES
-        self.movies_menu.add_command(label='Add', underline=0, 
-            command= lambda target = self.frames['create'] : self.__show_frame(target, fill_method='none', button_frame_enabled=True))
-        self.movies_menu.add_command(label='View', underline=1, 
-            command= lambda target = self.frames['view'] : self.__show_frame(target, fill_method='both', button_frame_enabled=False))
-
-        # *** MENU HELP ***
-        self.help_menu = tk.Menu(self.main_menu, tearoff=0)
-        self.main_menu.add_cascade(label='Help', menu=self.help_menu, underline=0) 
-
-        # *** MENÚ HELP - OPCIONES
-        self.help_menu.add_command(label='About...', underline=0, command=self.__show_about)
 
     def __search_movie(self):
         self.window.config(cursor='clock')
