@@ -289,3 +289,6 @@ class SuperMovieGUI:
 
         # Mostrar el frame activo        
         current_frame.pack(fill=fill_method, expand=True)        
+
+if __name__=='__main__':
+    gui_app = SuperMovieGUI()        
