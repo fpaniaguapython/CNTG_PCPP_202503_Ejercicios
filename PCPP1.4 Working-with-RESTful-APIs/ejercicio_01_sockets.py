@@ -16,7 +16,7 @@
 import socket
 
 server_addr= input('Host IP:') # Indicar localhost
-server_ip = int(input('Host Port:')) # Indicar 8000
+server_port = int(input('Host Port:')) # Indicar 8000
 
 # 1. Crear el socket: clase socket
 # AF_INET --> Socket se basa en DIRECCION + PUERTO
@@ -24,7 +24,7 @@ server_ip = int(input('Host Port:')) # Indicar 8000
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # 2. Establecer la conexión: método connect
-sock.connect((server_addr, server_ip))  # OJO, ES UNA TUPLA
+sock.connect((server_addr, server_port))  # OJO, ES UNA TUPLA
 
 # 3. Enviar la solicitud: método send
 sock.send(b"GET / HTTP/1.1\r\nHost: " +
