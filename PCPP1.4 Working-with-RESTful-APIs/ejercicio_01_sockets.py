@@ -15,7 +15,7 @@
 
 import socket
 
-server_addr= input('Host IP:') # Indicar localhost
+server_addr = input('Host IP:') # Indicar localhost
 server_port = int(input('Host Port:')) # Indicar 8000
 
 # 1. Crear el socket: clase socket
