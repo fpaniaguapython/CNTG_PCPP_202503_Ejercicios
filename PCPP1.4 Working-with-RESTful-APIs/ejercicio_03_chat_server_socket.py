@@ -1,3 +1,6 @@
+# Se intercambian mensajes introducidos por el usuario
+# hasta que se reciba la palabra VAIVAI
+
 import socket
 
 host = '127.0.0.1' # direccion del servidor (127.0.0.1 = localhost)
