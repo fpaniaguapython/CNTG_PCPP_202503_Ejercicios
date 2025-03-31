@@ -12,7 +12,7 @@ mensaje='Hola, soy el cliente'
 sock.send(mensaje.encode('utf-8'))
 print(f'Enviado al servidor el mensaje "{mensaje}"')
 # Lectura de mensaje
-respuesta = sock.recv(1000)
+respuesta = sock.recv(1024)
 print(f'Recibiendo el mensaje del servidor "{respuesta.decode('utf-8')}"')
 # Cierre
 sock.shutdown(socket.SHUT_RDWR)
