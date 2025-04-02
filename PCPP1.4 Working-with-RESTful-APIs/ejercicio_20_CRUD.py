@@ -57,7 +57,7 @@ def create():
         print('Ha pasado algo:', reply.status_code)
 
 def read():
-    reply = requests.get('http://localhost:3000/movies/5', timeout=0.1)
+    reply = requests.get('http://localhost:3000/movies/5')
     if (reply.status_code==requests.codes.OK):
         movie = reply.json()
         show_movie(movie)
