@@ -31,6 +31,11 @@ class BaseDatosPeliculas:
                        (movie.title, movie.director, movie.year))
         self.conn.commit()
 
+    # READ ALL
+
+
+    # READ ONE
+
     
 
 movies_db = BaseDatosPeliculas()
